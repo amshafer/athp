@@ -161,6 +161,7 @@ enum ath10k_fw_htt_op_version {
 
 enum ath10k_hw_rev {
 	ATH10K_HW_QCA988X,
+	ATH10K_HW_QCA9377,
 	ATH10K_HW_QCA6174,
 	ATH10K_HW_QCA99X0,
 };
