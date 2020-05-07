@@ -1,2 +1,8 @@
-
+otus/freebsd/modules/*
+otus/freebsd/src/sys/modules/athp*
+otus/freebsd/src/sys/modules/athfw*
 otus/freebsd/src/sys/.vscode/c_cpp_properties.json
+
+**/*.swp
+**/*~
+**/cscope*
