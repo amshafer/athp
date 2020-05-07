@@ -201,6 +201,7 @@ ath10k_pci_targ_cpu_to_ce_addr(struct ath10k *ar, u32 addr)
 	switch (ar->sc_hwrev) {
 	case ATH10K_HW_QCA988X:
 	case ATH10K_HW_QCA6174:
+	case ATH10K_HW_QCA9377:
 		val = (athp_pci_read32(ar, SOC_CORE_BASE_ADDRESS(ar->sc_regofs) +
 		    CORE_CTRL_ADDRESS) & 0x7ff) << 21;
 		break;

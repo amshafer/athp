@@ -425,8 +425,7 @@ exit:
 void __ath10k_ce_send_revert(struct ath10k_ce_pipe *pipe)
 {
 	struct ath10k *ar = pipe->ar;
-	struct ath10k_pci *ar_pci = pipe->psc;
-    UNUSED(ar_pci);
+//	struct ath10k_pci *ar_pci = pipe->psc;
 	struct ath10k_ce_ring *src_ring = pipe->src_ring;
 	uint32_t ctrl_addr = pipe->ctrl_addr;
 
@@ -489,8 +488,7 @@ int ath10k_ce_num_free_src_entries(struct ath10k_ce_pipe *pipe)
 int __ath10k_ce_rx_num_free_bufs(struct ath10k_ce_pipe *pipe)
 {
 //	struct ath10k *ar = pipe->ar;
-	struct ath10k_pci *ar_pci = pipe->psc;
-    UNUSED(ar_pci);
+	//struct ath10k_pci *ar_pci = pipe->psc;
 	struct ath10k_ce_ring *dest_ring = pipe->dest_ring;
 	unsigned int nentries_mask = dest_ring->nentries_mask;
 	unsigned int write_index = dest_ring->write_index;
@@ -504,8 +502,7 @@ int __ath10k_ce_rx_num_free_bufs(struct ath10k_ce_pipe *pipe)
 int __ath10k_ce_rx_post_buf(struct ath10k_ce_pipe *pipe, void *ctx, uint32_t paddr)
 {
 	struct ath10k *ar = pipe->ar;
-	struct ath10k_pci *ar_pci = pipe->psc;
-    UNUSED(ar_pci);
+	//struct ath10k_pci *ar_pci = pipe->psc;
 	struct ath10k_ce_ring *dest_ring = pipe->dest_ring;
 	unsigned int nentries_mask = dest_ring->nentries_mask;
 	unsigned int write_index = dest_ring->write_index;

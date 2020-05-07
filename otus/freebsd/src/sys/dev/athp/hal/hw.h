@@ -42,6 +42,11 @@
 #define QCA6174_HW_3_0_VERSION		0x05020000
 #define QCA6174_HW_3_2_VERSION		0x05030000
 
+/* QCA9377 target BMI version signatures */
+#define QCA9377_HW_1_0_DEV_VERSION 0x05020000
+#define QCA9377_HW_1_1_DEV_VERSION 0x05020001
+
+
 enum qca6174_pci_rev {
 	QCA6174_PCI_REV_1_1 = 0x11,
 	QCA6174_PCI_REV_1_3 = 0x13,
@@ -60,6 +65,11 @@ enum qca6174_chip_id_rev {
 	QCA6174_HW_3_2_CHIP_ID_REV = 10,
 };
 
+enum qca9377_chip_id_rev {
+	QCA9377_HW_1_0_CHIP_ID_REV = 0x0,
+	QCA9377_HW_1_1_CHIP_ID_REV = 0x1,
+};
+
 #define QCA6174_HW_2_1_FW_DIR		ATH10K_FW_DIR "_QCA6174_hw2.1"
 #define QCA6174_HW_2_1_FW_FILE		"firmware.bin"
 #define QCA6174_HW_2_1_OTP_FILE		"otp.bin"
@@ -71,6 +81,13 @@ enum qca6174_chip_id_rev {
 #define QCA6174_HW_3_0_OTP_FILE		"otp.bin"
 #define QCA6174_HW_3_0_BOARD_DATA_FILE	"board.bin"
 #define QCA6174_HW_3_0_PATCH_LOAD_ADDR	0x1234
+
+/* QCA9377 1.0 definitions */
+#define QCA9377_HW_1_0_FW_DIR          ATH10K_FW_DIR "_QCA9377_hw1.0"
+#define QCA9377_HW_1_0_FW_FILE         "firmware.bin"
+#define QCA9377_HW_1_0_OTP_FILE        "otp.bin"
+#define QCA9377_HW_1_0_BOARD_DATA_FILE "board.bin"
+#define QCA9377_HW_1_0_PATCH_LOAD_ADDR 0x1234
 
 /* QCA99X0 1.0 definitions (unsupported) */
 #define QCA99X0_HW_1_0_CHIP_ID_REV     0x0
@@ -163,6 +180,7 @@ enum ath10k_hw_rev {
 	ATH10K_HW_QCA988X,
 	ATH10K_HW_QCA6174,
 	ATH10K_HW_QCA99X0,
+	ATH10K_HW_QCA9377,
 };
 
 struct ath10k_hw_regs {
@@ -217,6 +235,7 @@ void ath10k_hw_fill_survey_time(struct ath10k *ar, struct survey_info *survey,
 #define QCA_REV_988X(sc) ((sc)->sc_hwrev == ATH10K_HW_QCA988X)
 #define QCA_REV_6174(sc) ((sc)->sc_hwrev == ATH10K_HW_QCA6174)
 #define QCA_REV_99X0(sc) ((sc)->sc_hwrev == ATH10K_HW_QCA99X0)
+#define QCA_REV_9377(sc) ((sc)->sc_hwrev == ATH10K_HW_QCA9377)
 
 /* Known pecularities:
  *  - raw appears in nwifi decap, raw and nwifi appear in ethernet decap
