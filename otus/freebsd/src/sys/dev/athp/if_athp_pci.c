@@ -133,6 +133,11 @@ athp_pci_probe(device_t dev)
 		return (BUS_PROBE_DEFAULT);
 	}
 
+	if (vendor_id == 0x168c && device_id == 0x0042) {
+		device_set_desc(dev, "QCA9377");
+		return (BUS_PROBE_DEFAULT);
+	}
+
 	if (vendor_id == 0x168c && device_id == 0x003e) {
 		device_set_desc(dev, "QCA6174");
 		return (BUS_PROBE_DEFAULT);
@@ -594,6 +599,11 @@ athp_pci_hw_lookup(struct ath10k_pci *ar_pci)
 		ar->sc_regofs = &qca988x_regs;
 		ar->sc_regvals = &qca988x_values;
 		break;
+	case QCA9377_1_0_DEVICE_ID:
+		ar->sc_hwrev = ATH10K_HW_QCA9377;
+		ar->sc_regofs = &qca6174_regs;
+		ar->sc_regvals = &qca6174_values;
+		break;
 	case QCA6164_2_1_DEVICE_ID:
 	case QCA6174_2_1_DEVICE_ID:
 		ar->sc_hwrev = ATH10K_HW_QCA6174;
@@ -809,6 +819,7 @@ athp_pci_attach(device_t dev)
 	 */
 	ar_pci->sc_vendorid = pci_get_vendor(dev);
 	ar_pci->sc_deviceid = pci_get_device(dev);
+	device_printf(dev, "%s: found deviceid %d\n", __func__, ar_pci->sc_deviceid);
 	if (athp_pci_hw_lookup(ar_pci) != 0) {
 		device_printf(dev, "%s: hw lookup failed\n", __func__);
 		err = ENXIO;
