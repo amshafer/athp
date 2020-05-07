@@ -125,6 +125,7 @@ static unsigned int ath10k_pci_reset_mode = ATH10K_PCI_RESET_AUTO;
 #define QCA6164_2_1_DEVICE_ID	(0x0041)
 #define QCA6174_2_1_DEVICE_ID	(0x003e)
 #define QCA99X0_2_0_DEVICE_ID	(0x0040)
+#define QCA9377_1_0_DEVICE_ID	(0x0042)
 
 static const struct athp_pci_supp_chip athp_pci_supp_chips[] = {
 	/*
@@ -147,6 +148,9 @@ static const struct athp_pci_supp_chip athp_pci_supp_chips[] = {
 	{ QCA6174_2_1_DEVICE_ID, QCA6174_HW_3_2_CHIP_ID_REV },
 
 	{ QCA99X0_2_0_DEVICE_ID, QCA99X0_HW_2_0_CHIP_ID_REV },
+
+	{ QCA9377_1_0_DEVICE_ID, QCA9377_HW_1_0_CHIP_ID_REV },
+	{ QCA9377_1_0_DEVICE_ID, QCA9377_HW_1_1_CHIP_ID_REV },
 };
 
 static void ath10k_pci_buffer_cleanup(struct ath10k_pci *ar);
@@ -409,6 +413,7 @@ ath10k_pci_targ_cpu_to_ce_addr(struct ath10k_pci *ar_pci, uint32_t addr)
 	switch (ar->sc_hwrev) {
 	case ATH10K_HW_QCA988X:
 	case ATH10K_HW_QCA6174:
+	case ATH10K_HW_QCA9377:
 		val = (athp_pci_read32(ar, SOC_CORE_BASE_ADDRESS(ar->sc_regofs) +
 					  CORE_CTRL_ADDRESS) &
 		       0x7ff) << 21;
@@ -431,6 +436,7 @@ ath10k_pci_irq_msi_fw_mask(struct ath10k_pci *ar_pci)
 	switch (ar->sc_hwrev) {
 	case ATH10K_HW_QCA988X:
 	case ATH10K_HW_QCA6174:
+	case ATH10K_HW_QCA9377:
 		val = athp_pci_read32(ar, SOC_CORE_BASE_ADDRESS(ar->sc_regofs) +
 		    CORE_CTRL_ADDRESS);
 		val &= ~CORE_CTRL_PCIE_REG_31_MASK;
@@ -454,6 +460,7 @@ ath10k_pci_irq_msi_fw_unmask(struct ath10k_pci *ar_pci)
 	switch (ar->sc_hwrev) {
 	case ATH10K_HW_QCA988X:
 	case ATH10K_HW_QCA6174:
+	case ATH10K_HW_QCA9377:
 		val = athp_pci_read32(ar, SOC_CORE_BASE_ADDRESS(ar->sc_regofs) +
 					CORE_CTRL_ADDRESS);
 		val |= CORE_CTRL_PCIE_REG_31_MASK;
@@ -546,6 +553,8 @@ ath10k_pci_get_num_banks(struct ath10k_pci *ar_pci)
 			return 9;
 		}
 		break;
+	case QCA9377_1_0_DEVICE_ID:
+		return 9;
 	}
 
 	ath10k_warn(ar, "unknown number of banks, assuming 1\n");
@@ -682,7 +691,7 @@ ath10k_pci_safe_chip_reset(struct ath10k_pci *ar_pci)
 {
 	struct ath10k *ar = &ar_pci->sc_sc;
 
-	if (QCA_REV_988X(ar) || QCA_REV_6174(ar)) {
+	if (QCA_REV_988X(ar) || QCA_REV_6174(ar) || QCA_REV_9377(ar)) {
 		return ath10k_pci_warm_reset(ar_pci);
 	} else if (QCA_REV_99X0(ar)) {
 		ath10k_pci_irq_disable(ar_pci);
@@ -837,7 +846,7 @@ ath10k_pci_chip_reset(struct ath10k_pci *ar_pci)
 
 	if (QCA_REV_988X(ar))
 		return ath10k_pci_qca988x_chip_reset(ar_pci);
-	else if (QCA_REV_6174(ar))
+	else if (QCA_REV_6174(ar) || QCA_REV_9377(ar))
 		return ath10k_pci_qca6174_chip_reset(ar_pci);
 	else if (QCA_REV_99X0(ar))
 		return ath10k_pci_qca99x0_chip_reset(ar_pci);

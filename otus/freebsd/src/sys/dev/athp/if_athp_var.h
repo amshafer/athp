@@ -31,6 +31,13 @@
 #include "if_athp_htt.h"
 #include "if_athp_hal_compl.h"
 
+#ifndef MA_OWNED
+  #define MA_OWNED LA_XLOCKED
+#endif
+#ifndef MA_NOTOWNED
+  #define MA_NOTOWNED LA_UNLOCKED
+#endif
+
 #define	ATHP_RXBUF_MAX_SCATTER	1
 #define	ATHP_TXBUF_MAX_SCATTER	1
 /* XXX upped these from 1024 */
