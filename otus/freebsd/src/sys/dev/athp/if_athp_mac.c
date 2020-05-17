@@ -4741,12 +4741,14 @@ static int ath10k_start_scan(struct ath10k *ar,
 	ATHP_CONF_LOCK_ASSERT(ar);
 
 	ret = ath10k_wmi_start_scan(ar, arg);
+	printf("ath10k_start_scan: ath10k_wmi_start_scan returned %d\n", ret);
 	if (ret)
 		return ret;
 
 	ret = ath10k_compl_wait(&ar->scan.started, "scan_start",
-	    &ar->sc_conf_mtx, 1);
+	    &ar->sc_conf_mtx, 10000);
 	if (ret == 0) {
+		ath10k_warn(ar, "failed to wait for start completion: %d\n", ret);
 		ret = ath10k_scan_stop(ar);
 		if (ret)
 			ath10k_warn(ar, "failed to stop scan: %d\n", ret);
@@ -6021,7 +6023,7 @@ ath10k_hw_scan(struct ath10k *ar, struct ieee80211vap *vif, int active_ms, int p
 
 	arg.n_channels = ic->ic_nchans;
 	for (i = 0; i < arg.n_channels; i++) {
-		arg.channels[i] = ic->ic_channels[i].ic_freq;
+		arg.channels[i] = ieee80211_get_channel_center_freq1(&ic->ic_channels[i]);
 		printf("ath10k_hw_scan_start: adding %d\n", arg.channels[i]);
 	}
 

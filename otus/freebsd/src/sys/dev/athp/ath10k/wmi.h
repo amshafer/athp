@@ -2808,7 +2808,8 @@ struct wmi_start_scan_arg {
 	u32 n_bssids;
 
 	u8 ie[WLAN_SCAN_PARAMS_MAX_IE_LEN];
-	u16 channels[64];
+	/* freebsd is finding 96 channels, some dups? */
+	u16 channels[128];
 	struct wmi_ssid_arg ssids[WLAN_SCAN_PARAMS_MAX_SSID];
 	struct wmi_bssid_arg bssids[WLAN_SCAN_PARAMS_MAX_BSSID];
 };
