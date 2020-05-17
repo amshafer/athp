@@ -5966,9 +5966,10 @@ ath10k_hw_scan(struct ath10k *ar, struct ieee80211vap *vif, int active_ms, int p
 {
 	struct ath10k_vif *arvif = ath10k_vif_to_arvif(vif);
 //	struct cfg80211_scan_request *req = &hw_req->req;
+	struct ieee80211com *ic = vif->iv_ic;
 	struct wmi_start_scan_arg arg;
 	int ret = 0;
-//	int i;
+	int i;
 
 	ATHP_CONF_LOCK(ar);
 
@@ -6016,15 +6017,13 @@ ath10k_hw_scan(struct ath10k *ar, struct ieee80211vap *vif, int active_ms, int p
 	} else {
 		arg.scan_ctrl_flags |= WMI_SCAN_FLAG_PASSIVE;
 	}
-
-	if (req->n_channels) {
-		arg.n_channels = req->n_channels;
-		for (i = 0; i < arg.n_channels; i++)
-			arg.channels[i] = req->channels[i]->center_freq;
-	}
-#else
-	ath10k_warn(ar, "%s: TODO: add scan request from net80211!\n", __func__);
 #endif
+
+	arg.n_channels = ic->ic_nchans;
+	for (i = 0; i < arg.n_channels; i++) {
+		arg.channels[i] = ic->ic_channels[i].ic_freq;
+		printf("ath10k_hw_scan_start: adding %d\n", arg.channels[i]);
+	}
 
 	ret = ath10k_start_scan(ar, &arg);
 	if (ret) {
